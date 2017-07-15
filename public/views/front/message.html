@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>message</title>
+    <script src="../../javascripts/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+    手机号：<input type="text" id="phone"/><br/>
+    留言：<textarea id="content" width="100px" height="100px"/></textarea>
+    <br/>
+    <button id="sub">提交</button>
+    <ul id="message">
+
+    </ul>
+</div>
+</body>
+</html>
+<script>
+    //请求留言列表
+    $.ajax({
+        url:'/users/showMessage',
+        success:function(data){
+            var str = '';
+            for(var i=0;i<data.res.length;i++){
+                str+='<li>'+data.res[i]['content']+'</li>';
+            }
+            $('#message').html(str);
+        }
+    });
+    $('#sub').click(function(){
+        var phone = $('#phone').val();
+        var content = $('#content').val();
+        $.ajax({
+            url:'/users/addMessage',
+            type:'post',
+            data:{phone:phone,content:content},
+            success:function(data){
+
+            }
+        });
+
+    });
+</script>

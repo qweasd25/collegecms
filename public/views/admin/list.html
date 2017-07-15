@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>list</title>
+    <script src="../../javascripts/jquery.min.js"></script>
+    <script src="../../javascripts/template.js"></script>
+    <link rel="stylesheet" href="../../stylesheets/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container"></div>
+</body>
+</html>
+<script id="showtable" type="text/html">
+    {{if res}}
+    <table class="table table-hover table-bordered table-striped">
+        <thead>
+        <tr>
+            <td>ID</td>
+            <td>手机号</td>
+            <td>内容</td>
+            <td>日期</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tbody>
+        {{each res as value}}
+        <tr>
+            <td>{{value.id}}</td>
+            <td>{{value.phone}}</td>
+            <td>{{value.content}}</td>
+            <td>{{value.timestamp}}</td>
+
+            <td>
+                <a class="btn btn-primary" data-id="{{value.id}}" onclick="judge(this)">
+                    {{if value.is_show}}
+                    <span>不通过</span>
+                    {{else}}
+                    <span>通过</span>
+                    {{/if}}
+                </a>
+                <a class="btn btn-danger" data-id="{{value.id}}" onclick="del(this)">删除</a>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+    {{/if}}
+</script>
+<script>
+    $.ajax({
+        url:'/users/list',
+        success:function(data){
+            console.log(data);
+//渲染
+            var html = template('showtable', data);
+            $('.container').html(html);
+        }
+    });
+    function judge(obj){
+        var id = $(obj).data('id');
+
+        var text = $.trim($(obj).text());
+
+        if(text =="通过"){
+            $.ajax({
+                url:'/users/judge?id='+id+'&isShow=1',
+                success:function(data){
+                    console.log(data);
+                    $(obj).text("不通过");
+                }
+            });
+        }else{
+            $.ajax({
+                url:'/users/judge?id='+id+'&isShow=0',
+                success:function(){
+                    $(obj).text("通过");
+                }
+            });
+        }
+    }
+
+    function del(obj){
+
+        var id=$(obj).data('id');
+        var flag = confirm('确定要删除此项吗？');
+        if(flag){
+            $.ajax({
+                url:'/users/del?id='+id,
+                success:function(){
+                    alert('删除成功');
+//location.reload();
+                }
+            });
+        }
+    }
+</script>

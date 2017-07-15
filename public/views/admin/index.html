@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>main page</title>
+    <script src="../../javascripts/jquery.min.js"></script>
+    <style>
+        .left{
+            position:fixed;
+            top:0;
+            left:0;
+            z-index:2;
+            border-right:1px solid #eee;
+            width:20%;
+            height:100%;
+        }
+        .right{
+            position:absolute;
+            top:0;
+            right:0;
+            width:70%;
+            height:100%;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="left">
+        <ul>
+            <li data-url="list.html">
+                留言列表
+            </li>
+            <li data-url="welcome.html">
+                其他
+            </li>
+        </ul>
+    </div>
+    <div class="right">
+        <iframe src="" frameborder="0" id="ifrm" width="100%" height="100%"></iframe>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    $('li').click(function(){
+        var url = $(this).data('url');
+// alert(url);
+//切换iframe的显示内容
+        $('#ifrm').attr('src',url);
+    });
+</script>
